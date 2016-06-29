@@ -1,7 +1,8 @@
 var WebSocket = require('ws');
 var osc = require('osc');
 
-var ws = new WebSocket("ws://127.0.0.1:8000");
+var url = process.argv[2];
+var ws = new WebSocket(url);
 ws.on('open', function() { console.log("websocket connection opened"); });
 
 var udp = new osc.UDPPort( { localAddress: "127.0.0.1", localPort: 8001 });
@@ -50,6 +51,6 @@ function clumpAndSend(address,text) {
     var end = start + 500;
     if(end > text.length) end = text.length;
     var toSend = text.slice(start,end);
-    udp.send( { address: address, args: [n,count,toSend] },"127.0.0.1",57120);  
+    udp.send( { address: address, args: [n,count,toSend] },"127.0.0.1",57120);
   }
 }
