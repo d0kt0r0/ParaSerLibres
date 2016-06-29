@@ -16,7 +16,7 @@ FragmentCollector {
 			^false;
 		},
 		{
-			text = text ++ textFragment;
+			text = if(n==0,textFragment,text++textFragment);
 			if(n<(count-1),{
 				expected = expected + 1;
 				^false;
@@ -36,7 +36,7 @@ ParaSerLibres {
 	classvar editCollector;
 	classvar evalCollector;
 
-	*initclass {
+	*initClass {
 		editCollector = FragmentCollector.new;
 		evalCollector = FragmentCollector.new;
 	}
@@ -53,12 +53,12 @@ ParaSerLibres {
 
 	*transmitEdit { |x|
 		var y = x.clump(500);
-		y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z);});
+		y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
 	}
 
 	*transmitEval { |x|
 		var y = x.clump(500);
-		y.collect({|z,i| netAddr.sendMsg("/eval",i,y.size,z);});
+		y.collect({|z,i| netAddr.sendMsg("/eval",i,y.size,z,NetAddr.langPort);});
 	}
 
 	*cosechar {
@@ -67,19 +67,23 @@ ParaSerLibres {
 			this.receivedEdit(m[1],m[2],m[3]);
 		},"/edit").permanent_(true);
 		OSCdef(\eval,{ |m,t,a,p|
-			this.receivedEdit(m[1],m[2],m[3]);
+			this.receivedEval(m[1],m[2],m[3]);
 		},"/eval").permanent_(true);
+
+		SkipJack.new( {
+			netAddr.sendMsg("/read",NetAddr.langPort);
+		},5, clock: SystemClock);
 	}
 
 	*receivedEdit { |n,count,text|
 		if(editCollector.cojer(n,count,text),{
-			Document.current.string_(editCollector.text);
+			Document.current.text = editCollector.text;
 		});
 	}
 
 	*receivedEval { |n,count,text|
 		if(evalCollector.cojer(n,count,text),{
-			text.interpret;
+			text.asString.interpret.postln;
 		});
 	}
 
