@@ -45,18 +45,22 @@ function request(x) {
   catch(e) { console.log("ERROR: exception in websocket send for request"); }
 }
 
+var scLangPort = 57120;
+
 udp.on('message', function(m) {
   if(m.address == "/edit") {
-    if(m.args.length != 3) { console.log("ERROR: /edit must have 3 arguments"); return; }
+    if(m.args.length != 4) { console.log("ERROR: /edit must have 4 arguments"); return; }
     var ready = editFragments.cojer(m.args[0],m.args[1],m.args[2]);
+    scLangPort = m.args[3];
     if(ready) {
       request({ request: 'write', key: 'paraSerLibres', value: editFragments.text });
       request({ request: 'all', name: 'edit', args: [] });
     }
   }
   else if (m.address == "/eval") {
-    if(m.args.length != 3) { console.log("ERROR: /eval must have 3 arguments"); return; }
+    if(m.args.length != 4) { console.log("ERROR: /eval must have 4 arguments"); return; }
     var ready = evalFragments.cojer(m.args[0],m.args[1],m.args[2]);
+    scLangPort = m.args[3];
     if(ready) request({ request: 'all', name: 'eval', args: [evalFragments.text] });
   }
   else console.log("ERROR: received unrecognized OSC message");
