@@ -1,7 +1,9 @@
 var WebSocket = require('ws');
 var osc = require('osc');
 
-var ws = new WebSocket("ws://127.0.0.1:8000");
+var url = process.argv[2];
+var ws = new WebSocket(url);
+console.log("connecting to " + url + "...");
 ws.on('open', function() { console.log("websocket connection opened"); });
 ws.on('message', function() { console.log("message received on websocket"); });
 
