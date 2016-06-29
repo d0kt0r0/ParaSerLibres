@@ -3,7 +3,7 @@
 
 ## Installation
 
-1. Install git, node.js and SuperCollider (3.7.0 or higher) on your system. Then clone this git repository under your SuperCollider extensions folder and run npm install to grab node.js libraries which are required. For example, on OS X:
+Install git, node.js and SuperCollider (3.7.0 or higher) on your system. Then clone this git repository under your SuperCollider extensions folder and run npm install to grab node.js libraries which are required. For example, on OS X:
 ```
 cd ~/Library/Application\ Support/SuperCollider/Extensions
 git clone https://github.com/d0kt0r0/ParaSerLibres.git
@@ -20,7 +20,6 @@ The above instructions should work on Windows and Linux as well - but you'll hav
 cd ~/Library/Application\ Support/SuperCollider/Extensions/ParaSerLibres
 node cosechar.js ws://my.great.server:8000
 ```
-
 2. Launch SuperCollider and boot the audio server with the required number of output channels. Then evaluate the following:
 ```
 ParaSerLibres.cosechar
@@ -35,7 +34,6 @@ If the apert web server is running and someone is remotely live coding, changes 
 cd ~/Library/Application\ Support/SuperCollider/Extensions/ParaSerLibres
 node sembrar.js ws://my.great.server:8000 verySecurePassword
 ```
-
 2. Launch SuperCollider, boot the audio server with the required number of output channels, and evaluate the following:
 ```
 ParaSerLibres.sembrar
