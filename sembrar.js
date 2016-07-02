@@ -17,11 +17,14 @@ ws.on('open', function() {
   request({request:'read',key:'pslText'}); // request current code
 });
 
+var pslText;
+
 ws.on('message', function(m) {
   var n = JSON.parse(m);
   if(n.type == "read") {
     if(n.key == 'pslText') {
-      clumpAndSend("/sembrar",n.value);
+      pslText = n.value;
+      console.log("pslText received");
     }
   }
 });
@@ -82,7 +85,16 @@ udp.on('message', function(m) {
     scLangPort = m.args[1];
   }
   else if (m.address == "/sembrar") {
-
+    if(m.args.length != 1) { console.log("ERROR: /sembrar must have 1 argument"); return; }
+    scLangPort = m.args[0];
+    if(pslText != null) {
+      clumpAndSend("/sembrar",pslText);
+      console.log("sending pslText in response to /sembrar");
+    }
+    else {
+      console.log("WARNING: responding to /sembrar with empty text");
+      clumpAndSend("/sembrar"," unable to grab code from server ");
+    }
   }
   else console.log("ERROR: received unrecognized OSC message");
 });

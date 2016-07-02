@@ -45,6 +45,9 @@ ParaSerLibres {
 		netAddr = NetAddr.new("127.0.0.1",8000);
 		netAddr.sendMsg("/sembrar",NetAddr.langPort);
 		OSCdef(\sembrar,{ |m,t,a,p|
+			if(editCollector.cojer(m[1],m[2],m[3]),{
+				Document.current.text = editCollector.text;
+			});
 			Document.current.keyUpAction = {
 				var y = Document.current.string.clump(500);
 				y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
