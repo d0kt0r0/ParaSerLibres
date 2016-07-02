@@ -53,7 +53,7 @@ udp.on('message', function(m) {
     var ready = editFragments.cojer(m.args[0],m.args[1],m.args[2]);
     scLangPort = m.args[3];
     if(ready) {
-      request({ request: 'write', key: 'paraSerLibres', value: editFragments.text });
+      request({ request: 'write', key: 'pslText', value: editFragments.text });
       request({ request: 'all', name: 'edit', args: [] });
     }
   }
@@ -62,6 +62,12 @@ udp.on('message', function(m) {
     var ready = evalFragments.cojer(m.args[0],m.args[1],m.args[2]);
     scLangPort = m.args[3];
     if(ready) request({ request: 'all', name: 'eval', args: [evalFragments.text] });
+  }
+  else if (m.address == "/cursor") {
+    if(m.args.length != 2) { console.log("ERROR: /cursor must have 2 arguments"); return; }
+    request({request: 'all', name: 'cursor', args: [m.args[0]});
+    request({request: 'write', key: 'pslCursor', value: JSON.stringify(m.args[0]) });
+    scLangPort = m.args[1];
   }
   else console.log("ERROR: received unrecognized OSC message");
 });
