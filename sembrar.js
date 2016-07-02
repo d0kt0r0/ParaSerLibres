@@ -86,3 +86,16 @@ udp.on('message', function(m) {
   }
   else console.log("ERROR: received unrecognized OSC message");
 });
+
+function clumpAndSend(address,text) {
+  var i = 0;
+  var count = Math.floor(text.length / 500);
+  if(text.length % 500 != 0) count = count + 1;
+  for(var n=0;n<count;n++) {
+    var start = n*500;
+    var end = start + 500;
+    if(end > text.length) end = text.length;
+    var toSend = text.slice(start,end);
+    udp.send( { address: address, args: [n,count,toSend] },"127.0.0.1",scLangPort);
+  }
+}
