@@ -5,8 +5,26 @@ var url = process.argv[2];
 var password = process.argv[3];
 var ws = new WebSocket(url);
 console.log("connecting to " + url + "...");
-ws.on('open', function() { console.log("websocket connection opened"); });
-ws.on('message', function() {}); // not getting anything back from apert right now
+
+function request(x) {
+  x.password = password;
+  try { ws.send(JSON.stringify(x)); }
+  catch(e) { console.log("ERROR: exception in websocket send for request"); }
+}
+
+ws.on('open', function() {
+  console.log("websocket connection to apert server opened");
+  request({request:'read',key:'pslText'}); // request current code
+});
+
+ws.on('message', function(m) {
+  var n = JSON.parse(m);
+  if(n.type == "read") {
+    if(n.key == 'pslText') {
+      clumpAndSend("/sembrar",n.value);
+    }
+  }
+});
 
 var udp = new osc.UDPPort( { localAddress: "127.0.0.1", localPort: 8000 });
 if(udp!=null) udp.open();
@@ -39,12 +57,6 @@ FragmentCollector.prototype.cojer = function (n,count,text) {
 var editFragments = new FragmentCollector();
 var evalFragments = new FragmentCollector();
 
-function request(x) {
-  x.password = password;
-  try { ws.send(JSON.stringify(x)); }
-  catch(e) { console.log("ERROR: exception in websocket send for request"); }
-}
-
 var scLangPort = 57120;
 
 udp.on('message', function(m) {
@@ -65,9 +77,12 @@ udp.on('message', function(m) {
   }
   else if (m.address == "/cursor") {
     if(m.args.length != 2) { console.log("ERROR: /cursor must have 2 arguments"); return; }
-    request({request: 'all', name: 'cursor', args: [m.args[0]});
+    request({request: 'all', name: 'cursor', args: [m.args[0]]});
     request({request: 'write', key: 'pslCursor', value: JSON.stringify(m.args[0]) });
     scLangPort = m.args[1];
+  }
+  else if (m.address == "/sembrar") {
+
   }
   else console.log("ERROR: received unrecognized OSC message");
 });

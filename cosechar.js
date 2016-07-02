@@ -25,7 +25,7 @@ var scLangPort = 57120;
 udp.on('message', function(m) {
   if(m.address == "/read") {
     scLangPort = m.args[0];
-    request({ request: 'read', key: 'paraSerLibres' });
+    request({ request: 'read', key: 'pslText' });
   }
   else console.log("ERROR: received unrecognized OSC message");
 });

@@ -43,15 +43,18 @@ ParaSerLibres {
 
 	*sembrar {
 		netAddr = NetAddr.new("127.0.0.1",8000);
-		Document.current.keyUpAction = {
-			var y = Document.current.string.clump(500);
-			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
-			netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
-		};
-		thisProcess.interpreter.codeDump = { |x|
-			var y = x.clump(500);
-			y.collect({|z,i| netAddr.sendMsg("/eval",i,y.size,z,NetAddr.langPort);});
-		};
+		netAddr.sendMsg("/sembrar",NetAddr.langPort);
+		OSCdef(\sembrar,{ |m,t,a,p|
+			Document.current.keyUpAction = {
+				var y = Document.current.string.clump(500);
+				y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
+				netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
+			};
+			thisProcess.interpreter.codeDump = { |x|
+				var y = x.clump(500);
+				y.collect({|z,i| netAddr.sendMsg("/eval",i,y.size,z,NetAddr.langPort);});
+			};
+		},"/sembrar").permanent_(true);
 	}
 
 	*cosechar {
