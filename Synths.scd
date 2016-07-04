@@ -1,6 +1,4 @@
-
-
-///1
+//1
 /////////////////////////////////////////////////////////////////////////SYNTHS
 (
 /////1
@@ -13,11 +11,10 @@ SynthDef(\hn1a, {|vol=1|
 	sig=BrownNoise.ar(0.5);
 		filt=RHPF.ar(sig, LFDNoise3.kr(0.25).range(10000, 3000), LFDNoise3.kr(0.25).range(0.01, 2) );
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 1), 1);
-	pan=PanAz.ar(8, rev, 0, vol, 2);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 0.05), LFDNoise3.kr(0.125).range(0.1, 2.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -31,11 +28,10 @@ SynthDef(\hn1b, {|vol=0.25|
 	sig=WhiteNoise.ar(0.25);
 		filt=RLPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.1, 60)).range(200, 4000), LFDNoise3.kr(4.7).range(0.001, 2) );
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 1), 1);
-			 pan=Pan2.ar(rev, 0, vol);
-		//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+		pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(0.1, LFDNoise3.kr(0.5).range(1, 15)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -49,11 +45,10 @@ SynthDef(\hn1c, {|vol=0.25|
 	sig=PinkNoise.ar(0.25);
 	filt=RLPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.125).range(0.01, 10)).range(10000, 800), LFDNoise3.kr(4.7).range(0.001, 2) )+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.0125).range(0.1, 3)).range(50, 200), LFDNoise3.kr(0.125).range(0.001, 8.0), LFDNoise3.kr(0.125).range(0.001, 1.0), 0.125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 1), 1);
-	pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 10.0), LFDNoise3.kr(0.125).range(0.1, 40.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -68,11 +63,10 @@ SynthDef(\hn2a, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 	filt=RHPF.ar(sig, LFDNoise3.kr(0.27).range(1000, 3000), LFDNoise3.kr(0.7).range(0.001, 2));
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 1), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-		//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+		pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.5).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.25).range(0.1, 25.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -86,11 +80,10 @@ SynthDef(\hn2b, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 	filt=RLPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.1, 5)).range(500, 1000), LFDNoise3.kr(0.2).range(0.001, 2));
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.5).range(0.1, 0.5), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.125).range(0.1, 3.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -104,11 +97,10 @@ SynthDef(\hn2c, {|vol=0.25|
 	sig=PinkNoise.ar(0.25);
 	filt=RLPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.01, 10)).range(1000, 200), LFDNoise3.kr(4.7).range(0.001, 2))+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.1, 4)).range(150, 200), LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.5).range(0.001, 2.0), 0.125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 0.5), 1);
-	pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.5).range(0.0, 1.75), vol, LFDNoise3.kr(0.15).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 1.0), LFDNoise3.kr(0.125).range(0.1, 40.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -123,11 +115,10 @@ SynthDef(\hn3a, {|vol=0.25|
 	sig=WhiteNoise.ar(0.25);
 			filt=RHPF.ar(sig, LFDNoise3.kr(0.25).range(4000, 13000), LFDNoise3.kr(0.25).range(0.01, 2) );
 			rev=FreeVerb.ar(filt, 0.5, 0.2);
-	pan=Pan2.ar(rev, 0, vol);
-		//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+		pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(1.25).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 0.1), LFDNoise3.kr(0.125).range(0.1, 0.3)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -141,11 +132,10 @@ SynthDef(\hn3b, {|vol=0.2|
 	sig=BrownNoise.ar(0.5);
 	filt=RHPF.ar(sig, LFDNoise3.kr(0.25).range(8000, 200), LFDNoise3.kr(0.25).range(0.01, 1) );
 			rev=FreeVerb.ar(filt, 0.2, 0.2);
-	pan=Pan2.ar(rev, 0, vol);
-		//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 0.1), LFDNoise3.kr(0.125).range(0.1, 1.3)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -159,11 +149,10 @@ SynthDef(\hn3c, {|vol=0.25|
 	sig=WhiteNoise.ar(0.25);
 	filt=RLPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.1).range(0.01, 1)).range(1000, 500), LFDNoise3.kr(0.1).range(0.001, 1) )+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.0125).range(0.1, 1)).range(150, 200), LFDNoise3.kr(0.125).range(0.001, 0.02), LFDNoise3.kr(0.15).range(0.001, 0.02), 0.15);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 0.5), 1);
-	pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.1).range(0.0, 1.75), vol, LFDNoise3.kr(0.2).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 4.0), LFDNoise3.kr(0.125).range(1.0, 4.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -178,11 +167,10 @@ SynthDef(\hn4a, {|vol=0.25|
 	sig=WhiteNoise.ar(0.125);
 		filt=RHPF.ar(sig,  LFDNoise3.kr(0.027).range(3000, 4000), 0.1);
 			rev=FreeVerb.ar(filt, 0.7, 1);
-			  pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(1.5).range(0.001, 1.0), LFDNoise3.kr(0.125).range(0.5, 2.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -196,11 +184,10 @@ SynthDef(\hn4b, {|vol=0.25|
 	sig=PinkNoise.ar(0.5);
 	filt=RHPF.ar(sig, LFDNoise3.kr(0.25).range(10000, 300), LFDNoise3.kr(0.25).range(0.01, 2) );
 	rev=FreeVerb.ar(filt, LFDNoise3.kr(0.5).range(0.1, 1.0), 1);
-			 pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(1.5).range(0.001, 1.0), LFDNoise3.kr(0.125).range(0.5, 5.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -214,11 +201,10 @@ SynthDef(\hn4c, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 	filt=RLPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.125).range(0.01, 1)).range(1000, 500), LFDNoise3.kr(0.1).range(0.001, 2) )+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.1, 1.0)).range(120, 220), LFDNoise3.kr(0.015).range(0.001, 2.0), LFDNoise3.kr(0.15).range(0.001, 2.0), 0.05);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.0125).range(0.1, 0.5), 1);
-	pan=Pan2.ar(rev, 0, vol);
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.025).range(0.0, 1.75), vol, LFDNoise3.kr(0.025).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.5).range(0.1, 20.0)), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -233,11 +219,10 @@ SynthDef(\hn5a, {|vol=0.25, atk=0.01, rel=0.2|
 	sig=WhiteNoise.ar(0.25);
 		filt=HPF.ar(sig, LFDNoise3.kr(2.5).range(2000, 8000));
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(2.5).range(0.1, 1.0), 1);
-			 pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	           env=EnvGen.ar(Env.perc(atk, rel), doneAction:2);
 	out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -251,11 +236,10 @@ SynthDef(\hn5b, {|vol=0.25, freq=2000,  atk=0.47, rel=4.7, mix=0.2|
 	sig=WhiteNoise.ar(0.25);
 	filt=HPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.5).range(0.5, 20)).range(8000, 800));
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(2.5).range(0.1, 1.0), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	             pan=PanAz.ar(8, rev, LFDNoise3.kr(0.5).range(0.0, 1.75), vol, LFDNoise3.kr(0.5).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 20.0), LFDNoise3.kr(0.5).range(0.1, 20.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 //~hn5b=Synth(\hn5b)
@@ -268,11 +252,10 @@ SynthDef(\hn5c, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 		filt=HPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.125).range(0.5, 20)).range(8000, 800))+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(1).range(0.1, 2.0)).range(500, 2000), LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.5).range(0.001, 2.0), 0.0125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.1, 1.0), 1);
-			 pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 5.0), LFDNoise3.kr(0.5).range(0.1, 50.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -287,11 +270,10 @@ SynthDef(\hn6a, {|vol=0.25|
 	sig=PinkNoise.ar(0.5);
 		filt=HPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.125).range(0.5, 20)).range(4000, 7000))+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.1).range(0.1, 2.0)).range(50, 200), LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.5).range(0.001, 2.0), 0.125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.1, 1.0), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	           pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 0.2), LFDNoise3.kr(0.5).range(0.01, 0.6)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -305,11 +287,10 @@ SynthDef(\hn6b, {|vol=0.25|
 	sig=WhiteNoise.ar(0.25);
           filt=HPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.5, 2)).range(1000, 200))+Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.1).range(0.1, 1.0)).range(50, 100), LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.5).range(0.001, 2.0), 0.25);
 	rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.1, 1.0), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 0.1), LFDNoise3.kr(0.5).range(0.01, 1.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -323,11 +304,10 @@ SynthDef(\hn6c, {|vol=0.25|
 	sig=WhiteNoise.ar(0.5);
 		filt=Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(1.5).range(0.1, 50.0)).range(80, 180), LFDNoise3.kr(0.5).range(0.001, 6.0), LFDNoise3.kr(0.5).range(0.001, 5.0), 0.125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.1, 1.0), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.1).range(0.0, 1.75), vol, LFDNoise3.kr(0.2).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 20.0), LFDNoise3.kr(0.5).range(0.01, 60.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -342,11 +322,10 @@ SynthDef(\hn7a, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 	filt=RHPF.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.1, 6)).range(200, 300), LFDNoise3.kr(1).range(0.001, 0.2));
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.5, 1.0), 1);
-			pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 0.2), LFDNoise3.kr(0.5).range(0.01, 0.3)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -360,11 +339,10 @@ SynthDef(\hn7b, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 	filt=RHPF.ar(sig, LFDNoise3.kr(2.5).range(200, 500), LFDNoise3.kr(2).range(0.001, 0.2));
 			rev=FreeVerb.ar(filt, 0.5, 1);
-				pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.5).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 5.0), LFDNoise3.kr(0.5).range(0.01, 5.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -378,11 +356,10 @@ SynthDef(\hn7c, {|vol=0.25|
 	sig=BrownNoise.ar(0.25);
 filt=RHPF.ar(sig, LFDNoise3.kr(1.5).range(200, 1500), LFDNoise3.kr(0.2).range(0.001, 0.2));
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.3).range(0.1, 1.0), 1);
-				pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 5.0), LFDNoise3.kr(0.5).range(0.01, 35.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -397,11 +374,10 @@ SynthDef(\hn8a, {|vol=0.25|
 	sig=WhiteNoise.ar(0.1);
 	filt=RHPF.ar(sig, LFDNoise3.kr(0.25).range(5000, 5500), LFDNoise3.kr(0.1).range(0.001, 0.01));
 			rev=FreeVerb.ar(filt, 0.5, 1);
-	pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.1).range(0.0, 0.02), LFDNoise3.kr(0.1).range(0.01, 0.1)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -415,11 +391,10 @@ SynthDef(\hn8b, {|vol=0.25|
 	sig=WhiteNoise.ar(0.1);
 		filt=Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(0.25).range(0.1, 50.0)).range(400, 100), LFDNoise3.kr(0.5).range(0.001, 2.0), LFDNoise3.kr(0.5).range(0.001, 8.0), 0.125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.1, 1.0), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.4).range(0.0, 1.75), vol, LFDNoise3.kr(0.3).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 20.0), LFDNoise3.kr(0.5).range(0.01, 60.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -433,11 +408,10 @@ SynthDef(\hn8c, {|vol=0.25|
 	sig=WhiteNoise.ar(0.25);
 		filt=Formlet.ar(sig, LFDNoise3.kr(LFDNoise3.kr(2).range(0.1, 20.0)).range(80, 180), LFDNoise3.kr(0.5).range(0.001, 10.0), LFDNoise3.kr(0.5).range(0.001, 10.0), 0.125);
 			rev=FreeVerb.ar(filt, LFDNoise3.kr(0.15).range(0.1, 1.0), 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
                 env=EnvGen.ar(Env.perc(LFDNoise3.kr(0.5).range(0.001, 30.0), LFDNoise3.kr(0.5).range(0.01, 80.0)), doneAction:2);
 	               out=pan*env;
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -454,10 +428,9 @@ SynthDef(\d1a, {| vol=0.25,  f1=138.59, f2=69.30, mix=0.2|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 200);
 			rev=FreeVerb.ar(filt, mix, 1);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 1.0), LFDNoise3.kr(1).range(0.01, 2.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -471,10 +444,9 @@ SynthDef(\d1b, {| vol=0.25,  f1=117.5, f2=235|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 200);
 			rev=FreeVerb.ar(filt, 0.2, 1);
-			pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.6).range(0.0, 1.75), vol, LFDNoise3.kr(0.3).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 1.0), LFDNoise3.kr(1).range(0.01, 3.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -489,10 +461,9 @@ SynthDef(\d2a, {|vol=0.25, f1=70, f2=140|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=RLPF.ar(sig, 100, LFDNoise3.kr(0.5).range(0.001, 1));
 			rev=FreeVerb.ar(filt, 0.4, 0.2);
-			 pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 1.0), LFDNoise3.kr(1).range(0.01, 3.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -506,10 +477,9 @@ SynthDef(\d2b, {|vol=0.1, f1=235, f2=470|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=RLPF.ar(sig, 270, 0.1, 0.3);
 			rev=FreeVerb.ar(filt, 0.4, 0.2);
-			   pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.5).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 5.0), LFDNoise3.kr(1).range(0.01, 5.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -524,10 +494,9 @@ SynthDef(\d3a, {| vol=0.25, f1=30, f2=70|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 150);
 			rev=FreeVerb.ar(filt, 0.4, 0.2);
-			   pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.2).range(0.0, 1.75), vol, LFDNoise3.kr(0.7).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 15.0), LFDNoise3.kr(1).range(0.01, 125.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -538,13 +507,12 @@ SynthDef(\d3a, {| vol=0.25, f1=30, f2=70|
 (
 SynthDef(\d3b, {| vol=0.25, f1=30, f2=70|
 	var  sig, rev, filt, env, pan, out;
-	sig=VarSaw.ar([f1, f2]);
+	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 150);
 			rev=FreeVerb.ar(filt, 0.5, 0.2);
-			 pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 0.1), LFDNoise3.kr(1).range(0.01, 0.2)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -556,13 +524,12 @@ SynthDef(\d3b, {| vol=0.25, f1=30, f2=70|
 (
 SynthDef(\d4a, {| vol=0.25, f1=100, f2=150|
 	var  sig, rev, filt, env, pan, out;
-	sig=VarSaw.ar([f1, f2]);
+	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=RLPF.ar(sig, 800,LFDNoise3.kr(0.5).range(0.001, 1));
 			rev=FreeVerb.ar(filt, 0.4, 0.6);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 0.1), LFDNoise3.kr(1).range(0.01, 0.2)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -576,10 +543,9 @@ SynthDef(\d4b, {| vol=0.25, f1=235, f2=117.5|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=RLPF.ar(sig, 100, LFDNoise3.kr(0.5).range(0.001, 1));
 			rev=FreeVerb.ar(filt, 0.4, 0.6);
-			 pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 30), LFDNoise3.kr(1).range(0.01, 100)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -592,13 +558,12 @@ SynthDef(\d4b, {| vol=0.25, f1=235, f2=117.5|
 (
 SynthDef(\d5a, {|vol=0.25, f1=47, f2=94|
 	var  sig, rev, filt, env, pan, out;
-	sig=VarSaw.ar([f1, f2]);
+	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=RLPF.ar(sig, 650, LFDNoise3.kr(1).range(0.001, 1));
 			rev=FreeVerb.ar(filt, 0.01, 0.5);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 0.1), LFDNoise3.kr(1).range(0.01, 0.2)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -612,10 +577,9 @@ SynthDef(\d5b, {|vol=0.2, f1=47, f2=94|
 	sig=Mix.new(VarSaw.ar([f1, f2]*LFDNoise3.kr(0.17).range(1, 1.47)));
 		filt=RLPF.ar(sig, 470/2, LFDNoise3.kr(1).range(0.001, 1));
 			rev=FreeVerb.ar(filt, 0.01, 0.5);
-			  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.5).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 30.0), LFDNoise3.kr(1).range(0.01, 80.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -630,10 +594,9 @@ SynthDef(\d6a, {|vol=0.25, f1=20, f2=37|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 650);
 			rev=FreeVerb.ar(filt, 0.2, 0.5);
-			  	  pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.5).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 0.1), LFDNoise3.kr(1).range(0.01, 17.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -647,10 +610,9 @@ SynthDef(\d6b, {|vol=0.25, f1=35, f2=47|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 470);
 			rev=FreeVerb.ar(filt, 0.2, 0.5);
-			   pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 0.1), LFDNoise3.kr(1).range(0.01, 17.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -665,10 +627,9 @@ SynthDef(\d7a, {|vol=0.25, f1=60, f2=90|
 	sig=Mix.new(VarSaw.ar([f1, f2]));
 		filt=LPF.ar(sig, 200);
 			rev=FreeVerb.ar(filt, 0.4, 0.2);
-			    pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.4).range(0.0, 1.75), vol, LFDNoise3.kr(0.8).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 0.1), LFDNoise3.kr(1).range(0.01, 0.5)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -682,10 +643,9 @@ SynthDef(\d7b, {|vol=0.5, f1=60, f2=90|
 	sig=Mix.new(VarSaw.ar([f1, f2]*4*LFDNoise3.kr(0.43).range(0.235, 0.7)));
 		filt=LPF.ar(sig, 300);
 			rev=FreeVerb.ar(filt, 0.4, 0.2);
-			    pan=Pan2.ar(rev, 0, vol);
-//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(LFDNoise3.kr(1).range(0.001, 20.0), LFDNoise3.kr(1).range(0.01, 90.5)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 );
 
@@ -700,10 +660,9 @@ SynthDef(\s1a, {| vol=0.25, freq=470, rq=0.1, atk=0.01, rel=0.1|
 	var  sig, filt, pan, out;
 	sig=WhiteNoise.ar(0.9);
 	filt=RLPF.ar(sig, freq, rq).distort*LFDNoise3.kr(0.047).range(0, 4);
-		pan=Pan2.ar(filt, 0, vol);
-//pan=PanAz.ar(8, filt, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, filt, LFDNoise3.kr(0.6).range(0.0, 1.75), vol, LFDNoise3.kr(0.6).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(atk, rel), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -716,10 +675,9 @@ SynthDef(\s1b, {| vol=0.25, freq=235,  atk=0.01, rel=0.1|
 	var  sig, filt, pan, out;
 	sig=WhiteNoise.ar(0.9);
 		filt=RLPF.ar(sig, LFDNoise3.kr(0.125).range(1000, 200), LFDNoise3.kr(4.7).range(0.001, 2)).distort*2;
-			  pan=Pan2.ar(filt, 0, vol);
-//pan=PanAz.ar(8, filt, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, filt, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.125).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(atk, rel), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -733,10 +691,9 @@ SynthDef(\kicka, {| vol=0.25, f1=47, f2=60, dist=6, cut=230, atk=0.01, rel=0.1|
 	var  sig, filt, pan, out;
 	sig=Mix.new(VarSaw.ar([f1, f2]).distort*dist);
 		filt=LPF.ar(sig, 600, 1);
-			  pan=Pan2.ar(filt, 0, vol);
-//pan=PanAz.ar(8, filt, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, filt, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(atk, rel), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -750,10 +707,9 @@ SynthDef(\kickb, {| vol=0.25, f1=47, f2=60, dist=4 atk=0.01, rel=0.5|
 	var  sig, filt, pan, out;
 	sig=Mix.new(VarSaw.ar([f1, f2]).distort*dist);
 		filt=LPF.ar(sig, 800, 1);
-			 pan=Pan2.ar(filt, 0, vol);
-//pan=PanAz.ar(8, filt, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+pan=PanAz.ar(8, filt, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.perc(atk, rel), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -769,14 +725,11 @@ SynthDef(\robo1a, {|vol=0.02|
 	sig=BrownNoise.ar(0.3);
 		dklank=Limiter.ar(DynKlank.ar(`[[TRand.kr(180, 90, Dust.ar(0.7)),TRand.kr(1000, 2000, Dust.ar(10)), TRand.kr(2000, 3000, Dust.ar(20)), TRand.kr(3000, 5000, Dust.ar(10))], [Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220)], [0.5, 0.5, 0.5, 0.5]], sig), 0.8, 0.00007);
 			rev=FreeVerb.ar(dklank, 0.1, 0.2);
-			 pan=Splay.ar(rev, LFDNoise3.kr(0.02).range(0.1, 1.0), vol, LFDNoise3.kr(0.1).range(-1.0, 1.0));
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.linen(0.01, 0.2, 0.1), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
-
-//~rm=Synth(\robo1a)n
 
 //~rma=Synth(\robo1a)
 
@@ -789,10 +742,9 @@ SynthDef(\robo1b, {|vol=0.02|
 	sig=BrownNoise.ar(0.3);
 		dklank=Limiter.ar(DynKlank.ar(`[[TRand.kr(100, 300, Dust.ar(0.9)),TRand.kr(235, 5000, Dust.ar(0.6)), TRand.kr(2000, 3000, Dust.ar(20)), TRand.kr(3000, 5000, Dust.ar(10))], [Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220)], [0.5, 0.5, 0.5, 0.5]], sig), 0.8, 0.00007);
 			rev=FreeVerb.ar(dklank, 0.1, 0.2);
-			 pan=Splay.ar(rev, LFDNoise3.kr(0.02).range(0.1, 1.0), vol, LFDNoise3.kr(0.1).range(-1.0, 1.0));
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.125).range(0.0, 1.75), vol, LFDNoise3.kr(0.5).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.linen(LFDNoise3.kr(0.5).range(0.001, 20), 0.2, LFDNoise3.kr(1).range(2, 125.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
@@ -807,27 +759,12 @@ SynthDef(\robo1c, {|vol=0.02|
 	sig=BrownNoise.ar(0.3);
 		dklank=Limiter.ar(DynKlank.ar(`[[TRand.kr(100, 520, Dust.ar(3)),TRand.kr(300, 600, Dust.ar(5)), TRand.kr(100, 1000, Dust.ar(0.5)), TRand.kr(3000, 5000, Dust.ar(10))], [Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220), Line.kr(0.3, 0.000, 220)], [0.5, 0.5, 0.5, 0.5]], sig), 0.8, 0.00007);
 			rev=FreeVerb.ar(dklank, 0.1, 0.2);
-			 pan=Splay.ar(rev, LFDNoise3.kr(0.02).range(0.1, 1.0), vol, LFDNoise3.kr(0.1).range(-1.0, 1.0));
-	//pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0));
+	pan=PanAz.ar(8, rev, LFDNoise3.kr(0.25).range(0.0, 1.75), vol, LFDNoise3.kr(0.25).range(1.0, 6.0), 0.5);
 	out=pan*EnvGen.ar(Env.linen(LFDNoise3.kr(0.5).range(0.001, 20), 0.2, LFDNoise3.kr(1).range(2, 85.0)), doneAction:2);
-		Out.ar(0, out);
+		Out.ar(ParaSerLibres.mainBus, out);
 }).add
 		);
 
 //~rmc=Synth(\robo1c)
 
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
