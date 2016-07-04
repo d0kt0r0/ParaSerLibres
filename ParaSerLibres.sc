@@ -41,26 +41,51 @@ ParaSerLibres {
 		evalCollector = FragmentCollector.new;
 	}
 
-	*sembrar {
+	*synths {
+		var path = (Platform.userExtensionDir ++ "/ParaSerLibres/SynthsPdefs.scd").standardizePath;
+		thisProcess.interpreter.executeFile(path);
+	}
+
+	*pdefs {
+		var path = (Platform.userExtensionDir ++ "/ParaSerLibres/Pdefs.scd").standardizePath;
+		var file = File.new(path,"r");
+		Document.current.text = file.readAllString;
+	}
+
+	*sembrar { |reinit=false|
+		this.synths;
 		netAddr = NetAddr.new("127.0.0.1",8000);
-		netAddr.sendMsg("/sembrar",NetAddr.langPort);
-		OSCdef(\sembrar,{ |m,t,a,p|
-			if(editCollector.cojer(m[1],m[2],m[3]),{
-				Document.current.text = editCollector.text;
-			});
-			Document.current.keyUpAction = {
-				var y = Document.current.string.clump(500);
-				y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
-				netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
-			};
-			thisProcess.interpreter.codeDump = { |x|
-				var y = x.clump(500);
-				y.collect({|z,i| netAddr.sendMsg("/eval",i,y.size,z,NetAddr.langPort);});
-			};
-		},"/sembrar").permanent_(true);
+		if(reinit,{
+			var y;
+			this.pdefs;
+			y = Document.current.string.clump(500);
+			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
+			this.sembrarHooks;
+		},{
+			netAddr.sendMsg("/sembrar",NetAddr.langPort);
+			OSCdef(\sembrar,{ |m,t,a,p|
+				if(editCollector.cojer(m[1],m[2],m[3]),{
+					Document.current.text = editCollector.text;
+					this.sembrarHooks;
+				});
+			},"/sembrar").permanent_(true);
+		});
+	}
+
+	*sembrarHooks {
+		Document.current.keyUpAction = {
+			var y = Document.current.string.clump(500);
+			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
+			netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
+		};
+		thisProcess.interpreter.codeDump = { |x|
+			var y = x.clump(500);
+			y.collect({|z,i| netAddr.sendMsg("/eval",i,y.size,z,NetAddr.langPort);});
+		};
 	}
 
 	*cosechar {
+		this.synths;
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
 		OSCdef(\edit,{ |m,t,a,p|
