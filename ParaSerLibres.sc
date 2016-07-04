@@ -35,6 +35,8 @@ ParaSerLibres {
 	classvar netAddr;
 	classvar editCollector;
 	classvar evalCollector;
+	classvar <mainBus;
+	classvar mainBusObject;
 
 	*initClass {
 		editCollector = FragmentCollector.new;
@@ -42,7 +44,10 @@ ParaSerLibres {
 	}
 
 	*synths {
-		var path = (Platform.userExtensionDir ++ "/ParaSerLibres/SynthsPdefs.scd").standardizePath;
+		var path;
+		mainBusObject = Bus.audio(Server.default,8);
+		mainBus = mainBusObject.index;
+		path = (Platform.userExtensionDir ++ "/ParaSerLibres/SynthsPdefs.scd").standardizePath;
 		thisProcess.interpreter.executeFile(path);
 	}
 
@@ -50,21 +55,23 @@ ParaSerLibres {
 		Server.default.freeAll;
 		if(Server.default.options.numOutputBusChannels == 10, {
 			SynthDef(\out,{
-				var multi = In.ar(0,8);
+				var multi = In.ar(mainBus,8);
 				var stereo = Splay.ar(multi)*(-15.dbamp);
 				multi = Compander.ar(multi,multi,thresh:-5.dbamp,slopeAbove:1/20);
 				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
 				ReplaceOut.ar(0,multi);
 				ReplaceOut.ar(8,stereo);
 			}).play(addAction:\addToTail);
+			"10-channel config: 8 channels main output + 2 channels stereo output".postln;
 		});
 		if(Server.default.options.numOutputBusChannels == 2, {
 			SynthDef(\out,{
-				var multi = In.ar(0,8);
+				var multi = In.ar(mainBus,8);
 				var stereo = Splay.ar(multi)*(-10.dbamp);
 				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
 				ReplaceOut.ar(0,stereo);
 			}).play(addAction:\addToTail);
+			"2-channel config: stereo mix of 8 channels only".postln;
 		});
 	}
 
