@@ -46,6 +46,28 @@ ParaSerLibres {
 		thisProcess.interpreter.executeFile(path);
 	}
 
+	*outSynth {
+		Server.default.freeAll;
+		if(Server.default.options.numOutputBusChannels == 10, {
+			SynthDef(\out,{
+				var multi = In.ar(0,8);
+				var stereo = Splay.ar(multi)*(-15.dbamp);
+				multi = Compander.ar(multi,multi,thresh:-5.dbamp,slopeAbove:1/20);
+				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
+				ReplaceOut.ar(0,multi);
+				ReplaceOut.ar(8,stereo);
+			}).play(addAction:\addToTail);
+		});
+		if(Server.default.options.numOutputBusChannels == 2, {
+			SynthDef(\out,{
+				var multi = In.ar(0,8);
+				var stereo = Splay.ar(multi)*(-10.dbamp);
+				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
+				ReplaceOut.ar(0,stereo);
+			}).play(addAction:\addToTail);
+		});
+	}
+
 	*pdefs {
 		var path = (Platform.userExtensionDir ++ "/ParaSerLibres/Pdefs.scd").standardizePath;
 		var file = File.new(path,"r");
@@ -54,6 +76,7 @@ ParaSerLibres {
 
 	*sembrar { |reinit=false|
 		this.synths;
+		this.outSynth;
 		netAddr = NetAddr.new("127.0.0.1",8000);
 		if(reinit,{
 			var y;
@@ -86,6 +109,7 @@ ParaSerLibres {
 
 	*cosechar {
 		this.synths;
+		this.outSynth;
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
 		OSCdef(\edit,{ |m,t,a,p|
@@ -107,6 +131,8 @@ ParaSerLibres {
 		SkipJack.new( {
 			netAddr.sendMsg("/read",NetAddr.langPort);
 		},5, clock: SystemClock);
+
+		netAddr.sendMsg("/sembrar",NetAddr.langPort);
 	}
 
 }
