@@ -47,29 +47,26 @@ ParaSerLibres {
 		var path;
 		mainBusObject = Bus.audio(Server.default,8);
 		mainBus = mainBusObject.index;
-		path = (Platform.userExtensionDir ++ "/ParaSerLibres/SynthsPdefs.scd").standardizePath;
+		path = (Platform.userExtensionDir ++ "/ParaSerLibres/Synths.scd").standardizePath;
 		thisProcess.interpreter.executeFile(path);
-	}
-
-	*outSynth {
 		Server.default.freeAll;
 		if(Server.default.options.numOutputBusChannels == 10, {
 			SynthDef(\out,{
-				var multi = In.ar(mainBus,8);
-				var stereo = Splay.ar(multi)*(-15.dbamp);
-				multi = Compander.ar(multi,multi,thresh:-5.dbamp,slopeAbove:1/20);
+				var multi = In.ar(mainBus,8)*(-9.dbamp);
+				var stereo = Splay.ar(multi)*(-3.dbamp);
+				multi = Compander.ar(multi,multi,thresh:-10.dbamp,slopeAbove:1/20);
 				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
-				ReplaceOut.ar(0,multi);
-				ReplaceOut.ar(8,stereo);
+				Out.ar(0,multi);
+				Out.ar(8,stereo);
 			}).play(addAction:\addToTail);
 			"10-channel config: 8 channels main output + 2 channels stereo output".postln;
 		});
 		if(Server.default.options.numOutputBusChannels == 2, {
 			SynthDef(\out,{
-				var multi = In.ar(mainBus,8);
-				var stereo = Splay.ar(multi)*(-10.dbamp);
+				var multi = In.ar(mainBus,8)*(-9.dbamp);
+				var stereo = Splay.ar(multi)*(-3.dbamp);
 				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
-				ReplaceOut.ar(0,stereo);
+				Out.ar(0,stereo);
 			}).play(addAction:\addToTail);
 			"2-channel config: stereo mix of 8 channels only".postln;
 		});
@@ -83,7 +80,6 @@ ParaSerLibres {
 
 	*sembrar { |reinit=false|
 		this.synths;
-		this.outSynth;
 		netAddr = NetAddr.new("127.0.0.1",8000);
 		if(reinit,{
 			var y;
@@ -116,7 +112,6 @@ ParaSerLibres {
 
 	*cosechar {
 		this.synths;
-		this.outSynth;
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
 		OSCdef(\edit,{ |m,t,a,p|
