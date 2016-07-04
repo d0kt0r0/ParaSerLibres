@@ -56,8 +56,8 @@ ParaSerLibres {
 				var stereo = Splay.ar(multi)*(-3.dbamp);
 				multi = Compander.ar(multi,multi,thresh:-10.dbamp,slopeAbove:1/20);
 				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
-				Out.ar(0,multi);
-				Out.ar(8,stereo);
+				Out.ar(0,stereo);
+				Out.ar(2,multi);
 			}).play(addAction:\addToTail);
 			"10-channel config: 8 channels main output + 2 channels stereo output".postln;
 		});
