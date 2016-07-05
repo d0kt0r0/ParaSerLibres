@@ -3,6 +3,8 @@
 //speedFreq: how many times per sec the amount of reverb changes
 //speedAtk: how many times per sec the length of the attack changes
 //speedRel: how many times per sec the length of the release changes
+//To stop all currently active Pdefs, do: Pdef.clear (don't use Cmd-Period or the system will have to be restarted)
+//To stop any specific Pdef, do: Pdef(\x).stop;
 
 
 //1
