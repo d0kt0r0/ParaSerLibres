@@ -37,8 +37,10 @@ ParaSerLibres {
 	classvar evalCollector;
 	classvar <mainBus;
 	classvar mainBusObject;
+	classvar firstRead;
 
 	*initClass {
+		firstRead = false;
 		editCollector = FragmentCollector.new;
 		evalCollector = FragmentCollector.new;
 	}
@@ -111,12 +113,17 @@ ParaSerLibres {
 	}
 
 	*cosechar {
+		firstRead = true;
 		this.synths;
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
 		OSCdef(\edit,{ |m,t,a,p|
 			if(editCollector.cojer(m[1],m[2],m[3]),{
 				Document.current.text = editCollector.text;
+				if(firstRead,{
+					firstRead = false;
+					editCollector.text.asString.interpret.postln;
+				});
 			});
 		},"/edit").permanent_(true);
 
@@ -134,7 +141,7 @@ ParaSerLibres {
 			netAddr.sendMsg("/read",NetAddr.langPort);
 		},5, clock: SystemClock);
 
-		netAddr.sendMsg("/sembrar",NetAddr.langPort);
+		netAddr.sendMsg("/read",NetAddr.langPort);
 	}
 
 }
