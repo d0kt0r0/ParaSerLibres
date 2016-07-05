@@ -156,7 +156,7 @@ ParaSerLibres {
 			suma = A2K.kr(Amplitude.ar(multi.sum/8,0.005, 0.05));
 			chain = FFT(fftBuffer.bufnum, multi.sum/8, wintype: 1);
 			ampL = A2K.kr(Amplitude.ar(stereo[0], 0.005, 0.05));
-			ampR = A2K.kr(Amplitude.ar(stereo[0], 0.005, 0.05));
+			ampR = A2K.kr(Amplitude.ar(stereo[1], 0.005, 0.05));
 			SendReply.kr(Impulse.kr(30),'/amp',values:[ampL,ampR]);
 		}).play(addAction:\addToTail);
 	}
