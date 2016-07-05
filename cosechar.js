@@ -61,7 +61,7 @@ ws.on('message', function(m) {
       // not that they would be received anyway
       // since they haven't been requested
     }
-    else console.log("ERROR: received 'read' with unrecognized key");
+    else console.log("ERROR: received 'read' with unrecognized key: " + n.key);
   }
   else if(n.type == "clientCount" || n.type == "refreshCount") {
     // silently ignore these apert messages
