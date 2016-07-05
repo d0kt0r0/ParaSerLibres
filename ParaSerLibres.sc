@@ -38,6 +38,7 @@ ParaSerLibres {
 	classvar <mainBus;
 	classvar mainBusObject;
 	classvar firstRead;
+	classvar <>fftBuffer;
 
 	*initClass {
 		firstRead = false;
@@ -71,6 +72,9 @@ ParaSerLibres {
 				Out.ar(0,stereo);
 			}).play(addAction:\addToTail);
 			"2-channel config: stereo mix of 8 channels only".postln;
+		});
+		if(fftBuffer.notNil,{
+			this.fftSynth;
 		});
 	}
 
@@ -144,4 +148,16 @@ ParaSerLibres {
 		netAddr.sendMsg("/read",NetAddr.langPort);
 	}
 
+	*fftSynth {
+		SynthDef("fft", {
+			var stereo, multi, suma, chain, ampL, ampR;
+			stereo = In.ar(0,2);
+			multi = In.ar(2,8);
+			suma = A2K.kr(Amplitude.ar(multi.sum/8,0.005, 0.05));
+			chain = FFT(fftBuffer.bufnum, multi.sum/8, wintype: 1);
+			ampL = A2K.kr(Amplitude.ar(stereo[0], 0.005, 0.05));
+			ampR = A2K.kr(Amplitude.ar(stereo[0], 0.005, 0.05));
+			SendReply.kr(Impulse.kr(30),'/amp',values:[ampL,ampR]);
+		}).play(addAction:\addToTail);
+	}
 }
