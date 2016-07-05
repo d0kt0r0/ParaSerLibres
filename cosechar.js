@@ -56,7 +56,7 @@ ws.on('message', function(m) {
     if(n.key == 'pslText') {
       clumpAndSend("/edit",n.value);
     }
-    if(n.key == 'pslCursor') {
+    else if(n.key == 'pslCursor') {
       // silently ignore pslCursor values
       // not that they would be received anyway
       // since they haven't been requested
