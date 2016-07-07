@@ -92,8 +92,9 @@ udp.on('message', function(m) {
       console.log("sending pslText in response to /sembrar");
     }
     else {
-      console.log("WARNING: responding to /sembrar with empty text");
-      clumpAndSend("/sembrar"," unable to grab code from server ");
+//      console.log("WARNING: unable to responding to /sembrar because pslText is still empty");
+  //    console.log(" if you get this error repeatedly try .sembrar(reinit:true) in SC");
+      // clumpAndSend("/sembrar"," unable to grab code from server ");
     }
   }
   else console.log("ERROR: received unrecognized OSC message");

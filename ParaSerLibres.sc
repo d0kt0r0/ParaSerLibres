@@ -10,7 +10,7 @@ FragmentCollector {
 
 	cojer { |n,count,textFragment|
 		if(n!=expected,{
-			"ERROR: fragment out of sequence".postln;
+			// "ERROR: fragment out of sequence".postln;
 			expected = 0;
 			text = "";
 			^false;
@@ -32,18 +32,53 @@ FragmentCollector {
 
 ParaSerLibres {
 
+	// public class variables
+	classvar <>fftBuffer;
+	classvar <>nodePath;
+	classvar <>server;
+	classvar >password;
+	classvar <mainBus;
+
+	// private variables
 	classvar netAddr;
 	classvar editCollector;
 	classvar evalCollector;
-	classvar <mainBus;
 	classvar mainBusObject;
 	classvar firstRead;
-	classvar <>fftBuffer;
 
 	*initClass {
 		firstRead = false;
 		editCollector = FragmentCollector.new;
 		evalCollector = FragmentCollector.new;
+		nodePath = "node";
+	}
+
+	*node {
+		|cmd|
+		fork {
+			"pkill -f cosechar.js".systemCmd;
+			0.3.wait;
+			"pkill -f sembrar.js".systemCmd;
+			0.3.wait;
+			cmd = "cd " ++ Platform.userExtensionDir.escapeChar($ ) ++ "/ParaSerLibres && " ++ nodePath ++ " " ++ cmd;
+			cmd.runInTerminal;
+		}
+	}
+
+	*nodeSembrar {
+		if(server.isNil || password.isNil,{
+			"ERROR: Either or both of ParaSerLibres.server and/or ParaSerLibres.password have not been set".postln;
+		},{
+			this.node("sembrar.js ws://" ++ server ++ " " ++ password);
+		});
+	}
+
+	*nodeCosechar {
+		if(server.isNil,{
+			"ERROR: ParaSerLibres.server has not been set".postln;
+		},{
+			this.node("cosechar.js ws://" ++ server);
+		});
 	}
 
 	*synths {
@@ -87,6 +122,7 @@ ParaSerLibres {
 
 	*sembrar { |reinit=false|
 		this.synths;
+		this.nodeSembrar;
 		netAddr = NetAddr.new("127.0.0.1",8000);
 		if(reinit,{
 			var y;
@@ -95,14 +131,23 @@ ParaSerLibres {
 			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
 			this.sembrarHooks;
 		},{
-			netAddr.sendMsg("/sembrar",NetAddr.langPort);
 			OSCdef(\sembrar,{ |m,t,a,p|
 				if(editCollector.cojer(m[1],m[2],m[3]),{
+					Tdef(\sembrar).stop;
 					Document.current.text = editCollector.text;
+					Document.current.text.asString.interpret;
+					OSCdef(\sembrar).free;
 					this.sembrarHooks;
 				});
 			},"/sembrar").permanent_(true);
+			Tdef(\sembrar,{
+				inf.do { netAddr.sendMsg("/sembrar",NetAddr.langPort); 0.25.wait; };
+			}).play;
 		});
+	}
+
+	*risembrar {
+		netAddr.sendMsg("/sembrar",NetAddr.langPort);
 	}
 
 	*sembrarHooks {
@@ -119,10 +164,10 @@ ParaSerLibres {
 
 	*cosechar {
 		var y;
+		this.nodeCosechar;
 		firstRead = true;
 		this.synths;
-				this.pdefs;
-
+		this.pdefs;
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
 		OSCdef(\edit,{ |m,t,a,p|
@@ -130,6 +175,7 @@ ParaSerLibres {
 				Document.current.text = editCollector.text;
 				if(firstRead,{
 					firstRead = false;
+					Tdef(\cosecharInit).stop;
 					editCollector.text.asString.interpret.postln;
 				});
 			});
@@ -145,11 +191,14 @@ ParaSerLibres {
 			Document.current.selectRange(m[1]);
 		},"/eval").permanent_(true);
 
+		Tdef(\cosecharInit,{
+			inf.do { netAddr.sendMsg("/read",NetAddr.langPort); 0.25.wait; }
+		}).play;
+
 		SkipJack.new( {
 			netAddr.sendMsg("/read",NetAddr.langPort);
 		},5, clock: SystemClock);
 
-		netAddr.sendMsg("/read",NetAddr.langPort);
 	}
 
 	*fftSynth {
