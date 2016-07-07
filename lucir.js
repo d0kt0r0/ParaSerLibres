@@ -1,7 +1,7 @@
 // ...para ser libres...
 
 $(document).ready(function() {
-  $(document.body).append('<div id="pslText">...esperando...</div>');
+  $(document.body).append('<div><pre id="pslText">...esperando...</pre></div>');
 });
 
 function edit() {
