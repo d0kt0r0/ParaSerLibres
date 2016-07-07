@@ -25,7 +25,7 @@ var scLangPort = 57120;
 udp.on('message', function(m) {
   if(m.address == "/read") {
     scLangPort = m.args[0];
-    request({ request: 'read', key: 'paraSerLibres' });
+    request({ request: 'read', key: 'pslText' });
   }
   else console.log("ERROR: received unrecognized OSC message");
 });
@@ -56,12 +56,12 @@ ws.on('message', function(m) {
     if(n.key == 'pslText') {
       clumpAndSend("/edit",n.value);
     }
-    if(n.key == 'pslCursor') {
+    else if(n.key == 'pslCursor') {
       // silently ignore pslCursor values
       // not that they would be received anyway
       // since they haven't been requested
     }
-    else console.log("ERROR: received 'read' with unrecognized key");
+    else console.log("ERROR: received 'read' with unrecognized key: " + n.key);
   }
   else if(n.type == "clientCount" || n.type == "refreshCount") {
     // silently ignore these apert messages

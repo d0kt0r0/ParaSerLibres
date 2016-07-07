@@ -5,8 +5,29 @@ var url = process.argv[2];
 var password = process.argv[3];
 var ws = new WebSocket(url);
 console.log("connecting to " + url + "...");
-ws.on('open', function() { console.log("websocket connection opened"); });
-ws.on('message', function() {}); // not getting anything back from apert right now
+
+function request(x) {
+  x.password = password;
+  try { ws.send(JSON.stringify(x)); }
+  catch(e) { console.log("ERROR: exception in websocket send for request"); }
+}
+
+ws.on('open', function() {
+  console.log("websocket connection to apert server opened");
+  request({request:'read',key:'pslText'}); // request current code
+});
+
+var pslText;
+
+ws.on('message', function(m) {
+  var n = JSON.parse(m);
+  if(n.type == "read") {
+    if(n.key == 'pslText') {
+      pslText = n.value;
+      console.log("pslText received");
+    }
+  }
+});
 
 var udp = new osc.UDPPort( { localAddress: "127.0.0.1", localPort: 8000 });
 if(udp!=null) udp.open();
@@ -39,12 +60,6 @@ FragmentCollector.prototype.cojer = function (n,count,text) {
 var editFragments = new FragmentCollector();
 var evalFragments = new FragmentCollector();
 
-function request(x) {
-  x.password = password;
-  try { ws.send(JSON.stringify(x)); }
-  catch(e) { console.log("ERROR: exception in websocket send for request"); }
-}
-
 var scLangPort = 57120;
 
 udp.on('message', function(m) {
@@ -65,9 +80,34 @@ udp.on('message', function(m) {
   }
   else if (m.address == "/cursor") {
     if(m.args.length != 2) { console.log("ERROR: /cursor must have 2 arguments"); return; }
-    request({request: 'all', name: 'cursor', args: [m.args[0]});
+    request({request: 'all', name: 'cursor', args: [m.args[0]]});
     request({request: 'write', key: 'pslCursor', value: JSON.stringify(m.args[0]) });
     scLangPort = m.args[1];
   }
+  else if (m.address == "/sembrar") {
+    if(m.args.length != 1) { console.log("ERROR: /sembrar must have 1 argument"); return; }
+    scLangPort = m.args[0];
+    if(pslText != null) {
+      clumpAndSend("/sembrar",pslText);
+      console.log("sending pslText in response to /sembrar");
+    }
+    else {
+      console.log("WARNING: responding to /sembrar with empty text");
+      clumpAndSend("/sembrar"," unable to grab code from server ");
+    }
+  }
   else console.log("ERROR: received unrecognized OSC message");
 });
+
+function clumpAndSend(address,text) {
+  var i = 0;
+  var count = Math.floor(text.length / 500);
+  if(text.length % 500 != 0) count = count + 1;
+  for(var n=0;n<count;n++) {
+    var start = n*500;
+    var end = start + 500;
+    if(end > text.length) end = text.length;
+    var toSend = text.slice(start,end);
+    udp.send( { address: address, args: [n,count,toSend] },"127.0.0.1",scLangPort);
+  }
+}
