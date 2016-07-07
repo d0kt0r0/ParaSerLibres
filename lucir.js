@@ -3,17 +3,18 @@
 $(document).ready(function() {
   $(document.body).append('<div id="code">...esperando...</pre></div>');
   $(document.body).css({
-    background-color: "black"
+    backgroundColor: "black"
   });
   $('#code').css({
-    font-size: "0.95vh",
+    fontSize: "0.95vh",
     color: "green",
 //    -webkit-column-count: "4",
 //    -webkit-column-gap: "5px",
 //    -moz-column-count: "4",
 //    -moz-column-gap: "5px",
-    column-count: "4",
-    column-gap: "5px"
+    columnCount: "4",
+    columnGap: "5px"
+  });
 });
 
 function apertWebSocketOpened() {
