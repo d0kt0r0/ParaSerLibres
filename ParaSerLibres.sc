@@ -53,7 +53,7 @@ ParaSerLibres {
 		path = (Platform.userExtensionDir ++ "/ParaSerLibres/Synths.scd").standardizePath;
 		thisProcess.interpreter.executeFile(path);
 		Server.default.freeAll;
-		if(Server.default.options.numOutputBusChannels == 10, {
+		if(Server.default.options.numOutputBusChannels >= 10, {
 			SynthDef(\out,{
 				var multi = In.ar(mainBus,8)*(-9.dbamp);
 				var stereo = Splay.ar(multi)*(-3.dbamp);
@@ -62,16 +62,16 @@ ParaSerLibres {
 				Out.ar(0,stereo);
 				Out.ar(2,multi);
 			}).play(addAction:\addToTail);
-			"10-channel config: 8 channels main output + 2 channels stereo output".postln;
+			"ParaSerLibres 10-channel config: 2 channels stereo output + 8 channels main output".postln;
 		});
-		if(Server.default.options.numOutputBusChannels == 2, {
+		if(Server.default.options.numOutputBusChannels < 10, {
 			SynthDef(\out,{
 				var multi = In.ar(mainBus,8)*(-9.dbamp);
 				var stereo = Splay.ar(multi)*(-3.dbamp);
 				stereo = Compander.ar(stereo,stereo,thresh:-10.dbamp,slopeAbove:1/10);
 				Out.ar(0,stereo);
 			}).play(addAction:\addToTail);
-			"2-channel config: stereo mix of 8 channels only".postln;
+			"ParaSerLibres 2-channel config: stereo mix of 8 channels only".postln;
 		});
 		if(fftBuffer.notNil,{
 			this.fftSynth;
