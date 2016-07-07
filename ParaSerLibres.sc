@@ -82,6 +82,7 @@ ParaSerLibres {
 		var path = (Platform.userExtensionDir ++ "/ParaSerLibres/Pdefs.scd").standardizePath;
 		var file = File.new(path,"r");
 		Document.current.text = file.readAllString;
+		Document.current.text.asString.interpret;
 	}
 
 	*sembrar { |reinit=false|
@@ -117,7 +118,9 @@ ParaSerLibres {
 	}
 
 	*cosechar {
+		var y;
 		firstRead = true;
+		this.pdefs;
 		this.synths;
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
