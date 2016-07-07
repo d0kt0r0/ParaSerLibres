@@ -120,8 +120,9 @@ ParaSerLibres {
 	*cosechar {
 		var y;
 		firstRead = true;
-		this.pdefs;
 		this.synths;
+				this.pdefs;
+
 		netAddr = NetAddr.new("127.0.0.1",8001);
 
 		OSCdef(\edit,{ |m,t,a,p|
