@@ -18,7 +18,7 @@ $(document).ready(function() {
     fontSize: "5vh",
     opacity: "0",
     width: "75%",
-    left: "25%",
+    left: "12.5%",
     top: "20%"
   });
 });
@@ -40,18 +40,44 @@ function apertReceivedRead(key,value) {
   }
 }
 
+var focusState = 0; // 0 = nothing, 1 = fade-in, 2 = hold, 3 = fade-out
+
+function changeFocusState(n) {
+  focusState = n;
+  if(n == 0) {
+    $('#popup').animate({ opacity: "0", 100, function() {});
+  }
+  else if(n == 1) {
+    $('#popup').stop(true); // so that reattack before fade is finished starts right away
+    $('#popup').animate({ opacity: "1" }, 5000, function() {
+      changeFocusState(2);
+    });
+  }
+  else if(n == 2) {
+    $('#popup').stop(true); // so that repeated changes to state 2 don't accumulate time
+    $('#popup').animate({ opacity: "1"}, 20000, function() {
+      changeFocusState(3);
+    });
+  }
+  else if(n == 3) {
+    $('#popup').animate({ opacity: "0", 20000, function() {
+      changeFocusState(0);
+    });
+  }
+}
+
+function focusEvent() {
+  if(focusState == 0) changeFocusState(1);
+  else if(focusState == 1) return;
+  else if(focusState == 2) changeFocusState(2);
+  else if(focusState == 3) changeFocusState(1);
+}
+
 function cursor(pos) {
   var focus = focusNLinesAround(1,pos,pslText);
   if(focus == null) return;
   $('#popup').html(focus);
-  $('#popup').animate({
-    opacity: "1",
-    left: "12.5%"
-  } , 5000, function() {
-  }).animate({
-    opacity: "0",
-    top: "250"
-  }, 5000, function() {});
+  focusEvent();
 }
 
 function focusNLinesAround(width,pos,t) {
