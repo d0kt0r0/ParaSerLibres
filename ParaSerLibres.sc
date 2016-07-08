@@ -134,8 +134,8 @@ ParaSerLibres {
 			OSCdef(\sembrar,{ |m,t,a,p|
 				if(editCollector.cojer(m[1],m[2],m[3]),{
 					Tdef(\sembrar).stop;
-					Document.current.text = editCollector.text;
-					Document.current.text.asString.interpret;
+					if(Document.current.notNil,{Document.current.text = editCollector.text});
+					editCollector.text.interpret.postln;
 					OSCdef(\sembrar).free;
 					this.sembrarHooks;
 				});
@@ -172,23 +172,23 @@ ParaSerLibres {
 
 		OSCdef(\edit,{ |m,t,a,p|
 			if(editCollector.cojer(m[1],m[2],m[3]),{
-				Document.current.text = editCollector.text;
+				if(Document.current.notNil,{ Document.current.text = editCollector.text });
 				if(firstRead,{
 					firstRead = false;
 					Tdef(\cosecharInit).stop;
-					editCollector.text.asString.interpret.postln;
+					editCollector.text.interpret.postln;
 				});
 			});
 		},"/edit").permanent_(true);
 
 		OSCdef(\eval,{ |m,t,a,p|
 			if(evalCollector.cojer(m[1],m[2],m[3]),{
-				evalCollector.text.asString.interpret.postln;
+				evalCollector.text.interpret.postln;
 			});
 		},"/eval").permanent_(true);
 
 		OSCdef(\cursor,{ |m,t,a,p|
-			Document.current.selectRange(m[1]);
+			if(Document.current.notNil,{ Document.current.selectRange(m[1]) });
 		},"/eval").permanent_(true);
 
 		Tdef(\cosecharInit,{

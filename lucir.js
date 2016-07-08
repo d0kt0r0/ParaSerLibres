@@ -76,10 +76,10 @@ setInterval(function() {
   if(now - lastFocusEvent > 46000) {
     // if no events in last 46 seconds
     // simulate a cursor event at a random position in the code
-    console.log("random cursor event at now");
+    console.log("random cursor event at " + now);
     cursor(Math.floor(Math.random()*pslText.length));
   }
-},10000);
+},5000);
 
 function focusEvent() {
   var d = new Date();
