@@ -44,6 +44,7 @@ var focusState = 0; // 0 = nothing, 1 = fade-in, 2 = hold, 3 = fade-out
 
 function changeFocusState(n) {
   focusState = n;
+  console.log("changeFocusState " + n);
   if(n == 0) {
     $('#popup').animate({ opacity: "0"}, 100, function() {});
   }
@@ -75,6 +76,7 @@ setInterval(function() {
   if(now - lastFocusEvent > 46000) {
     // if no events in last 46 seconds
     // simulate a cursor event at a random position in the code
+    console.log("random cursor event at now");
     cursor(Math.floor(Math.random()*pslText.length));
   }
 },10000);
@@ -82,16 +84,19 @@ setInterval(function() {
 function focusEvent() {
   var d = new Date();
   lastFocusEvent = d.getTime();
+  console.log("focusEvent at " + lastFocusEvent);
   if(focusState == 0) changeFocusState(1);
-  else if(focusState == 1) return;
+  else if(focusState == 1) {
+    console.log("remaining in state 1");
+    return;
+  }
   else if(focusState == 2) changeFocusState(2);
   else if(focusState == 3) changeFocusState(1);
 }
 
 function cursor(pos) {
   var focus = focusNLinesAround(1,pos,pslText);
-  if(focus == null) return;
-  $('#popup').html(focus);
+  if(focus != null) $('#popup').html(focus);
   focusEvent();
 }
 
