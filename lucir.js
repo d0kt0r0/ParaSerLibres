@@ -79,7 +79,7 @@ function focusNLinesAround(width,pos,t) {
     var endL = targetLine + width;
     if(endL>=nlines)endL = nlines-1;
     for(var i=startLine;i<endL;i++) {
-      var line = nl2br(lines[i]);
+      var line = lines[i];
       output = output + line;
       if(i!=(endL-1))output = output + "<br/>";
     }
