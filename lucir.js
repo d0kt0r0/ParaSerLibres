@@ -81,7 +81,7 @@ setInterval(function() {
 
 function focusEvent() {
   var d = new Date();
-  var lastFocusEvent = d.getTime();
+  lastFocusEvent = d.getTime();
   if(focusState == 0) changeFocusState(1);
   else if(focusState == 1) return;
   else if(focusState == 2) changeFocusState(2);
