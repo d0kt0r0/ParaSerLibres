@@ -76,7 +76,7 @@ function focusNLinesAround(width,pos,t) {
     var output = "";
     var startLine = targetLine - width;
     if(startLine<0)startLine = 0;
-    var endL = targetLine + width;
+    var endL = targetLine + width + 1;
     if(endL>=nlines)endL = nlines-1;
     for(var i=startLine;i<endL;i++) {
       var line = lines[i];
