@@ -66,7 +66,22 @@ function changeFocusState(n) {
   }
 }
 
+var lastFocusEvent;
+
+setInterval(function() {
+  if(lastFocusEvent == null || pslText == null) return;
+  var d = new Date();
+  var now = d.getTime();
+  if(now - lastFocusEvent > 46000) {
+    // if no events in last 46 seconds
+    // simulate a cursor event at a random position in the code
+    cursor(Math.floor(Math.random()*pslText.length));
+  }
+},10000);
+
 function focusEvent() {
+  var d = new Date();
+  var lastFocusEvent = d.getTime();
   if(focusState == 0) changeFocusState(1);
   else if(focusState == 1) return;
   else if(focusState == 2) changeFocusState(2);
