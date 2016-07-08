@@ -45,7 +45,7 @@ var focusState = 0; // 0 = nothing, 1 = fade-in, 2 = hold, 3 = fade-out
 function changeFocusState(n) {
   focusState = n;
   if(n == 0) {
-    $('#popup').animate({ opacity: "0", 100, function() {});
+    $('#popup').animate({ opacity: "0"}, 100, function() {});
   }
   else if(n == 1) {
     $('#popup').stop(true); // so that reattack before fade is finished starts right away
@@ -60,7 +60,7 @@ function changeFocusState(n) {
     });
   }
   else if(n == 3) {
-    $('#popup').animate({ opacity: "0", 20000, function() {
+    $('#popup').animate({ opacity: "0"}, 20000, function() {
       changeFocusState(0);
     });
   }
