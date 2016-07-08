@@ -66,7 +66,7 @@ function changeFocusState(n) {
   }
 }
 
-var lastFocusEvent;
+var lastFocusEvent = (new Date()).getTime();
 
 setInterval(function() {
   if(lastFocusEvent == null || pslText == null) return;
