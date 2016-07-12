@@ -116,14 +116,19 @@ ParaSerLibres {
 	*pdefs {
 		var path = (Platform.userExtensionDir ++ "/ParaSerLibres/Pdefs.scd").standardizePath;
 		var file = File.new(path,"r");
-		Document.current.text = file.readAllString;
-		Document.current.text.asString.interpret;
+		var text = file.readAllString;
+		if(Document.current.notNil,{Document.current.text = text;});
+		text.interpret;
 	}
 
 	*sembrar { |reinit=false|
 		this.synths;
 		this.nodeSembrar;
 		netAddr = NetAddr.new("127.0.0.1",8000);
+		if(Document.current.isNil,{
+			"ERROR: sembrar not possible without open document".postln;
+			^nil;
+		});
 		if(reinit,{
 			var y;
 			this.pdefs;
@@ -154,7 +159,10 @@ ParaSerLibres {
 		Document.current.keyUpAction = {
 			var y = Document.current.string.clump(500);
 			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
-			netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
+			fork {
+				0.25.wait;
+				netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
+			};
 		};
 		thisProcess.interpreter.codeDump = { |x|
 			var y = x.clump(500);
