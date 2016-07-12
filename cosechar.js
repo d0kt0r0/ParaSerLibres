@@ -10,7 +10,7 @@ process.on('uncaughtException', function(err) {
 });
 
 function openWebSocket() {
-  console.log("opening websocket connection to " + url);
+  console.log("cosechar.js: opening websocket connection to " + url + "...");
   ws = new WebSocket(url);
   ws.on('open', function() {
     wsReady = true;

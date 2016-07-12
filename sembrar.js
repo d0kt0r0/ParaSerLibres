@@ -3,23 +3,47 @@ var osc = require('osc');
 
 var url = process.argv[2];
 var password = process.argv[3];
-var ws = new WebSocket(url);
-console.log("connecting to " + url + "...");
+var wsReady = false;
+var ws;
+
+process.on('uncaughtException', function(err) {
+  console.log("surviving uncaught exception");
+});
+
+function openWebSocket() {
+  console.log("sembrar.js: opening websocket connection to " + url + "...");
+  ws = new WebSocket(url);
+  ws.on('open', function() {
+    wsReady = true;
+    console.log("websocket connection opened");
+    ws.on('message', websocketMessage);
+    request({request:'read',key:'pslText'}); // request current code
+  });
+  ws.on('error', function () {
+    console.log('socket error');
+    wsReady = false;
+  });
+  ws.on('close', function () {
+    console.log('socket closed');
+    wsRead = false;
+    ws = null;
+    console.log('retrying in 10 seconds...')
+    setTimeout(openWebSocket,10000);
+  });
+}
+openWebSocket();
 
 function request(x) {
-  x.password = password;
-  try { ws.send(JSON.stringify(x)); }
-  catch(e) { console.log("ERROR: exception in websocket send for request"); }
+  if(wsReady && (ws != null)) {
+    x.password = password;
+    try { ws.send(JSON.stringify(x)); }
+    catch(e) { console.log("ERROR: exception in websocket send for request"); }
+  }
 }
-
-ws.on('open', function() {
-  console.log("websocket connection to apert server opened");
-  request({request:'read',key:'pslText'}); // request current code
-});
 
 var pslText;
 
-ws.on('message', function(m) {
+function websocketMessage(m) {
   var n = JSON.parse(m);
   if(n.type == "read") {
     if(n.key == 'pslText') {
@@ -27,7 +51,7 @@ ws.on('message', function(m) {
       console.log("pslText received");
     }
   }
-});
+}
 
 var udp = new osc.UDPPort( { localAddress: "127.0.0.1", localPort: 8000 });
 if(udp!=null) udp.open();
