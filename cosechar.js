@@ -2,19 +2,41 @@ var WebSocket = require('ws');
 var osc = require('osc');
 
 var url = process.argv[2];
-console.log("opening websocket connection to " + url);
-var ws = new WebSocket(url);
+var ws;
 var wsReady = false;
-ws.on('open', function() {
-  wsReady = true;
-  console.log("websocket connection opened");
+
+process.on('uncaughtException', function(err) {
+  console.log("surviving uncaught exception");
 });
+
+function openWebSocket() {
+  console.log("opening websocket connection to " + url);
+  ws = new WebSocket(url);
+  ws.on('open', function() {
+    wsReady = true;
+    console.log("websocket connection opened");
+    ws.on('message', websocketMessage);
+  });
+  ws.on('error', function () {
+    console.log('socket error');
+    wsReady = false;
+  });
+  ws.on('close', function () {
+    console.log('socket closed');
+    wsRead = false;
+    ws = null;
+    console.log('retrying in 10 seconds...')
+    setTimeout(openWebSocket,10000);
+  });
+}
+
+openWebSocket();
 
 var udp = new osc.UDPPort( { localAddress: "127.0.0.1", localPort: 8001 });
 if(udp!=null) udp.open();
 
 function request(x) {
-  if(wsReady) {
+  if(wsReady && (ws != null)) {
     try { ws.send(JSON.stringify(x)); }
     catch(e) { console.log("ERROR: exception in websocket send for request"); }
   }
@@ -30,7 +52,7 @@ udp.on('message', function(m) {
   else console.log("ERROR: received unrecognized OSC message");
 });
 
-ws.on('message', function(m) {
+function websocketMessage(m) {
   var n = JSON.parse(m);
   if(n.type == "all") {
     if(n.name == "eval") {
@@ -69,7 +91,7 @@ ws.on('message', function(m) {
   else {
     console.log("ERROR: received unrecognized/unexpected message type (" + n.type + ") from apert server");
   }
-});
+}
 
 function clumpAndSend(address,text) {
   var i = 0;
