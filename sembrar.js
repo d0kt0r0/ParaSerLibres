@@ -3,12 +3,15 @@ var osc = require('osc');
 
 var url = process.argv[2];
 var password = process.argv[3];
+var debug = (process.argv[4] == "debug");
 var wsReady = false;
 var ws;
 
-process.on('uncaughtException', function(err) {
-  console.log("surviving uncaught exception");
-});
+if(!debug) {
+  process.on('uncaughtException', function(err) {
+    console.log("surviving uncaught exception");
+  });
+}
 
 function openWebSocket() {
   console.log("sembrar.js: opening websocket connection to " + url + "...");
@@ -95,6 +98,18 @@ udp.on('message', function(m) {
       request({ request: 'write', key: 'pslText', value: editFragments.text });
       request({ request: 'all', name: 'edit', args: [] });
     }
+  }
+  else if(m.address == "/insert") {
+    if(m.args.length != 3) { console.log("ERROR: /insert must have 3 arguments"); return; }
+    scLangPort = m.args[2];
+    request({ request: 'writeInsert', key: 'pslText', pos: m.args[0], text: m.args[1]});
+    request({ request: 'all', name: 'edit', args: [] });
+  }
+  else if(m.address == "/delete") {
+    if(m.args.length != 2) { console.log("ERROR: /delete must have 2 arguments"); return; }
+    scLangPort = m.args[1];
+    request({ request: 'writeDelete', key: 'pslText', pos: m.args[0]});
+    request({ request: 'all', name: 'edit', args: [] });
   }
   else if (m.address == "/eval") {
     if(m.args.length != 4) { console.log("ERROR: /eval must have 4 arguments"); return; }

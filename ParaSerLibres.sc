@@ -45,9 +45,12 @@ ParaSerLibres {
 	classvar evalCollector;
 	classvar mainBusObject;
 	classvar firstRead;
+	classvar oldText;
+	classvar editCount;
 
 	*initClass {
 		firstRead = false;
+		editCount = 0;
 		editCollector = FragmentCollector.new;
 		evalCollector = FragmentCollector.new;
 		nodePath = "node";
@@ -121,9 +124,9 @@ ParaSerLibres {
 		text.interpret;
 	}
 
-	*sembrar { |reinit=false|
+	*sembrar { |reinit=false,doLaunchNode=true|
 		this.synths;
-		this.nodeSembrar;
+		if(doLaunchNode,{this.nodeSembrar});
 		netAddr = NetAddr.new("127.0.0.1",8000);
 		if(Document.current.isNil,{
 			"ERROR: sembrar not possible without open document".postln;
@@ -155,10 +158,42 @@ ParaSerLibres {
 		netAddr.sendMsg("/sembrar",NetAddr.langPort);
 	}
 
+	*sembrarDiff {
+		var y,d;
+		if((editCount>=128)||(oldText.isNil), { // first time and every 128 keys send the full text regardless of diff
+			// "sending clumped full document".postln;
+			oldText = Document.current.string;
+			y = Document.current.string.clump(500);
+			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
+			editCount = 0;
+			^nil;
+		});
+		editCount = editCount + 1;
+		d = this.diff; 		// otherwise look for simple diffs
+		if(d.isNil,{^nil}); // do nothing if no difference
+		if(d[0] == "insert",{
+			// ("/insert " ++ d[1].asString ++ " " ++ d[2].asString).postln;
+			d[2].class.postln;
+			netAddr.sendMsg("/insert",d[1],d[2].asString,NetAddr.langPort);
+			^nil;
+		});
+		if(d[0] == "delete",{
+			// ("/delete " ++ d[1].asString).postln;
+			netAddr.sendMsg("/delete",d[1],NetAddr.langPort);
+			^nil;
+		});
+		if(d[0] == "multiple",{
+			// "sending clumped full document".postln;
+			y = Document.current.string.clump(500);
+			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
+			editCount = 0;
+			^nil;
+		});
+	}
+
 	*sembrarHooks {
 		Document.current.keyUpAction = {
-			var y = Document.current.string.clump(500);
-			y.collect({|z,i| netAddr.sendMsg("/edit",i,y.size,z,NetAddr.langPort);});
+			this.sembrarDiff;
 			fork {
 				0.25.wait;
 				netAddr.sendMsg("/cursor",Document.current.selectionStart,NetAddr.langPort);
@@ -221,4 +256,59 @@ ParaSerLibres {
 			SendReply.kr(Impulse.kr(30),'/amp',values:[ampL,ampR]);
 		}).play(addAction:\addToTail);
 	}
+
+	*charInserted { |a,b|
+		// suppose that a single extra character has been inserted into b relative to a
+		// if hypothesis is false return nil
+		// if hypothesis is true return index of new character in b
+		var firstDiff = nil, diffCount = 0;
+		if(b.size != (a.size + 1),{^nil}); // if size not bigger by one, hypothesis is false
+		for(0,a.size-1,{ |i| if( firstDiff.isNil && (b[i] != a[i]),{firstDiff=i})}); // find first difference
+		if(firstDiff.isNil,{ ^a.size }); // if no diff in that range, then must be a single character appended
+		for(firstDiff+1,a.size-1,{|i| if( b[i+1] != a[i],{ diffCount = diffCount+1 })}); // count remaining diffs
+		if(diffCount == 0, { ^firstDiff }); // if no more diffs, then one diff was at first diff
+		^nil; // otherwise, hypothesis is false
+	}
+
+	*charDeleted { |a,b|
+		// suppose that a single character has been deleted from a to form b
+		// if hypothesis is false return nil
+		// if hypothesis is true return index of character deleted from a
+		var firstDiff = nil, diffCount = 0;
+		if(b.size != (a.size - 1),{^nil}); // if size not smaller by one, hypothesis is false
+		for(0,b.size-1,{ |i| if( firstDiff.isNil && (b[i] != a[i]),{firstDiff=i})}); // find first difference
+		if(firstDiff.isNil,{ ^a.size-1 }); // if no diff in that range, then deleted character must have been last of a
+		for(firstDiff,b.size-1,{|i| if( b[i] != a[i+1],{ diffCount = diffCount+1 })}); // count remaining diffs
+		if(diffCount == 0, { ^firstDiff }); // if no more diffs, then one diff was at first diff
+		^nil; // otherwise, hypothesis is false
+	}
+
+	*diff {
+		var x,newText;
+		if(oldText.isNil,{
+			oldText = Document.current.text;
+			^nil;
+		});
+		newText = Document.current.text;
+		if(newText == oldText,{^nil});
+		x = this.charInserted(oldText,newText);
+		if(x.notNil,{
+			oldText = newText;
+			^["insert",x,newText[x]];
+		});
+		x = this.charDeleted(oldText,newText);
+		if(x.notNil,{
+			oldText = newText;
+			^["delete",x];
+		});
+		oldText = newText;
+		^["multiple"];
+	}
+
+	*testDiff {
+		Document.current.keyUpAction = {
+			this.diff.postln;
+		};
+	}
+
 }
