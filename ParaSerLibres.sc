@@ -160,7 +160,7 @@ ParaSerLibres {
 
 	*sembrarDiff {
 		var y,d;
-		if((editCount>=128)||(oldText.isNil), { // first time and every 128 keys send the full text regardless of diff
+		if((editCount>=1024)||(oldText.isNil), { // first time and every 1024 keys send the full text regardless of diff
 			// "sending clumped full document".postln;
 			oldText = Document.current.string;
 			y = Document.current.string.clump(500);
@@ -173,7 +173,6 @@ ParaSerLibres {
 		if(d.isNil,{^nil}); // do nothing if no difference
 		if(d[0] == "insert",{
 			// ("/insert " ++ d[1].asString ++ " " ++ d[2].asString).postln;
-			d[2].class.postln;
 			netAddr.sendMsg("/insert",d[1],d[2].asString,NetAddr.langPort);
 			^nil;
 		});
