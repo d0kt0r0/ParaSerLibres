@@ -28,7 +28,7 @@ function openWebSocket() {
   });
   ws.on('close', function () {
     console.log('socket closed');
-    wsRead = false;
+    wsReady = false;
     ws = null;
     console.log('retrying in 10 seconds...')
     setTimeout(openWebSocket,10000);
