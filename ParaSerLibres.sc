@@ -102,7 +102,15 @@ ParaSerLibres {
 			}).play(addAction:\addToTail);
 			"ParaSerLibres 10-channel config: 2 channels stereo output + 8 channels main output".postln;
 		});
-		if(Server.default.options.numOutputBusChannels < 10, {
+		if(Server.default.options.numOutputBusChannels == 8, {
+			SynthDef(\out,{
+				var multi = In.ar(mainBus,8)*(-9.dbamp);
+				multi = Compander.ar(multi,multi,thresh:-10.dbamp,slopeAbove:1/20);
+				Out.ar(0,multi);
+			}).play(addAction:\addToTail);
+			"ParaSerLibres 8-channel config: 8 channels main output".postln;
+		});
+		if(Server.default.options.numOutputBusChannels < 8, {
 			SynthDef(\out,{
 				var multi = In.ar(mainBus,8)*(-9.dbamp);
 				var stereo = Splay.ar(multi)*(-3.dbamp);
